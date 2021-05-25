@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block content %} 
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="display-4">Шифруем - просто!</h1>
+      <p class="lead">Без Пап, Мам и регистрации смс</p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h3 class="display1">Давайте попробуем</h3>
+
+                <form action="{% url 'index' %}" method="post">
+                    {% csrf_token %}
+                    <div class="container">
+                      <br>
+                      <label for="basic-url">Введите пословицу: </label>
+                     <input class="form-control" type="text" placeholder="Введите пословицу " name="message" >
+                     <label for="basic-url">Введите ключ: </label>
+                     <input class="form-control" type="text" placeholder="Введите ключ " name="key" >
+                     <label for="basic-url">Выберите шифр: </label>
+
+                     <select name="flag_crypt">
+                        <option value='1'>Атбаш</option>
+                        <option value='2'>Белазо</option>
+                        <option value='3'>Цезарь</option>
+                        <option value='4'>Матричный</option>
+                        <option value='5'>Плейфера</option>
+                        <option value='6'>Решетка Кардано</option>
+                        <option value='7'>Полибий</option>
+                        <option value='8'>Вертикальная перестановка</option>
+                        <option value='9'>А5/1</option>
+                        <option value='10'>А5/2</option>
+                        <option value='11'>RSA</option>
+                        <option value='12'>AES</option>
+                        <option value='12'>ГОСТ-94</option>
+                        <option value='13'>ГОСТ-2012</option>
+                        <option value='14'>ГОСТ-2012</option>
+                        <option value='15'>Elgamal</option>
+                        <option value='15'>Диффи-Хелман</option>
+                        <option value='16'>S-block</option>
+
+                      </select >
+                      <br>
+                      <label for="basic-url">Выберите действие: </label>
+
+                     <select name='flag_action'> 
+                        <option value='encrypt'>Шифрование</option>
+                        <option value='decrypt'>Расшифровка</option>
+
+                      </select>
+                      <br>
+                     <input class="btn btn-primary" type="submit" value="Отправить">
+                    </form>
+                  </div>
+                {% if warning_list %}
+                  {% for i in warning_list %}
+                    <div class="alert alert-danger" role="alert">
+                      {{i}}
+                    </div>
+                {% endfor %}
+                {% endif %}
+           {% if result %}
+           <div class="alert alert-success" role="alert">
+            Результат: {{ result }}
+          </div>
+           {% endif %}
+        </div>
+      </div>
+  </div>
+
+
+
+
+{% endblock %}
