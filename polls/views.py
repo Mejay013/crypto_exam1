@@ -13,7 +13,7 @@ def index(request):
         flag_action = request.POST['flag_action']
         response = str()
 
-        if flag_crypt in [1] and key != '': # проверка на передачу ключа в те шифры, где это не нужно
+        if flag_crypt in [1,7] and key != '': # проверка на передачу ключа в те шифры, где это не нужно
             warning_list.append('Для данного шифра ключ не нужен. Игнорируем ключ')
 
         if flag_crypt == 1:
@@ -29,7 +29,7 @@ def index(request):
         elif flag_crypt == 6:
             pass
         elif flag_crypt == 7:
-            pass
+            response = f.polibiy(message,flag_action)
         elif flag_crypt == 8:
             pass
         elif flag_crypt == 9:

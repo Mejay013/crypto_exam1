@@ -1,3 +1,5 @@
+from re import findall # метод из модуля для разбиения строки на подстроки
+
 def atbash(message, flag):
     alphavite = ',.!:\'\"#?@[](){} '
     if flag == 'encrypt':
@@ -95,4 +97,21 @@ def caesar(message,flg,key):
                 decode += alphavite[(alphavite.find(i) - distance) % len(alphavite)]
         return decode
 
+
+def polibiy(message,flg):
+    alphavite = 'абвгдежзийклмнопрстуфхцчшщъыьэюяАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ' #алфавит
+    if flg == 'encrypt':
+        text = message #.lower() #Ввод сообщения
+        encode = '' #Зашифрованное сообщение
+        for i in text: #блок шифрования
+            encode += str(alphavite.find(i) // 8 + 1) + str(alphavite.find(i) % 8 + 1) + ' '
+                # определяем 2 числа, номер строки, как целое от деления позиции символа
+                # в алфавите на 8, и номер столбца, как остаток от деления позиции символа на 8
+        return encode #вывод зашифровнного текста
+    else:
+        text = message.split()
+        decode = ''
+        for i in text:
+                decode += alphavite[(int(i[0]) - 1) * 8 + int(i[1]) - 1]
+        return decode
 
