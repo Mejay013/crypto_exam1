@@ -1,4 +1,5 @@
 from re import findall # метод из модуля для разбиения строки на подстроки
+import random
 
 def atbash(message, flag):
     alphavite = ',.!:\'\"#?@[](){} '
@@ -114,4 +115,95 @@ def polibiy(message,flg):
         for i in text:
                 decode += alphavite[(int(i[0]) - 1) * 8 + int(i[1]) - 1]
         return decode
+        
+def reshetka_kardano(message,flg):
+    matrix_number = 1
+    text = 'волккаждыйгодлиняетзптдавсесербываеттчк'
+    SIZE = 4
+    # дополняем матрицу с текстом до полной матрицы
+    open_text_ = text
+    if len(text) % (SIZE * SIZE) != 0:
+        add_number = SIZE * SIZE - len(text) % (SIZE * SIZE)
+        for i in range(add_number):
+            text = text + "*"
+    # определяем количество матриц
+    if len(text) / (SIZE * SIZE) != 1:
+        matrix_number = int(len(text) / (SIZE * SIZE))
+    # print(" Введите значения ячеек решётки Кардано (0 - заполнена, 1 - пустота):\n")
 
+    # формируем решётку Кардано
+    bin_matrix = [[0 for x in range(SIZE)] for y in range(SIZE)]
+    for i in range(SIZE):
+        for j in range(SIZE):
+            bin_matrix[i][j] = random.randint(0, 1)   # рандомизируем ячейки матрицы, либо 1, либо 0
+
+    # формируем матрицу с текстом
+    text_matrix = [[[0 for x in range(SIZE)] for y in range(SIZE)] for matrix in range(matrix_number)]
+    counter_text = 0  # счётчик позиции символа в тексте
+    for i in range(matrix_number):
+        for j in range(SIZE):
+            for k in range(SIZE):
+                text_matrix[i][j][k] = text[counter_text]
+                counter_text += 1
+    if flg == 'encrypt':
+        # шифрование
+        # SIZE - размерность матрицы, z - номер матрицы с текстом, i - строка (Y), j - столбец (X).
+        enc_text = ""
+        for z in range(matrix_number):
+            # прямой обход решетки
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[i][j] == 1:
+                        enc_text = enc_text + text_matrix[z][i][j]
+            # поворот решетки на 90 градусов по часовой стрелке
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[SIZE - j - 1][i] == 1:
+                        enc_text = enc_text + text_matrix[z][i][j]
+            # поворот решетки на 180 градусов по часовой стрелке
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[SIZE - i - 1][SIZE - j - 1] == 1:
+                        enc_text = enc_text + text_matrix[z][i][j]
+            # поворот решетки на 270 градусов по часовой стрелке
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[j][SIZE - i - 1] == 1:
+                        enc_text = enc_text + text_matrix[z][i][j]
+        encrypted_text = str((" {}\n".format(enc_text)))
+        return enc_text
+        # расшифрование
+    else:
+        enc_text = message
+        # формируем матрицу с текстом
+        text_matrix = [[[0 for x in range(SIZE)] for y in range(SIZE)] for matrix in range(matrix_number)]
+        counter_text = 0  # счётчик позиции символа в тексте
+        for i in range(matrix_number):
+            for j in range(SIZE):
+                for k in range(SIZE):
+                    text_matrix[i][j][k] = enc_text[counter_text]
+                    counter_text += 1
+        open_text = ""
+        for z in range(matrix_number):
+            # прямой обход решетки
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[i][j] == 1:
+                        open_text = open_text + text_matrix[z][i][j]
+            # поворот решетки на 90 градусов по часовой стрелке
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[SIZE - j - 1][i] == 1:
+                        open_text = open_text + text_matrix[z][i][j]
+            # поворот решетки на 180 градусов по часовой стрелке
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[SIZE - i - 1][SIZE - j - 1] == 1:
+                        open_text = open_text + text_matrix[z][i][j]
+            # поворот решетки на 270 градусов по часовой стрелке
+            for i in range(SIZE):
+                for j in range(SIZE):
+                    if bin_matrix[j][SIZE - i - 1] == 1:
+                        open_text = open_text + text_matrix[z][i][j]
+        decrypted_text = str(" {}\n".format(open_text_))
+        return  decrypted_text
