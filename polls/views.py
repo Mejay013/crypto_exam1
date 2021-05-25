@@ -21,7 +21,7 @@ def index(request):
         elif flag_crypt == 2:
             response = f.belazo(message,flag_action,key)
         elif flag_crypt == 3:
-            pass
+            response = f.caesar(message,flag_action,key)
         elif flag_crypt == 4:
             pass
         elif flag_crypt == 5:
