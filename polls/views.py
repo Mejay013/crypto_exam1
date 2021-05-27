@@ -13,7 +13,7 @@ def index(request):
         flag_action = request.POST['flag_action']
         response = str()
 
-        if flag_crypt in [1,6,7,15] and key != '': # проверка на передачу ключа в те шифры, где это не нужно
+        if flag_crypt in [1,6,7,11,15] and key != '': # проверка на передачу ключа в те шифры, где это не нужно
             warning_list.append('Для данного шифра ключ не нужен. Игнорируем ключ')
 
         if flag_crypt == 1:
@@ -37,7 +37,7 @@ def index(request):
         elif flag_crypt == 10:
             pass
         elif flag_crypt == 11:
-            pass
+            response = f.rsa(message,flag_action)
         elif flag_crypt == 12:
             pass
         elif flag_crypt == 13:

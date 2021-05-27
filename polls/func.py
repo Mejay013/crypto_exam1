@@ -1,5 +1,6 @@
 from re import findall # метод из модуля для разбиения строки на подстроки
 import random
+from math import gcd as bltin_gcd
 
 def atbash(message, flag):
     alphavite = ',.!:\'\"#?@[](){} '
@@ -242,7 +243,6 @@ def IsPrime(n):
 
 def group(iterable, count):
     """ Группировка элементов последовательности по count элементов """
- 
     return list(zip(*[iter(iterable)] * count))
 
 def elgamal(message,flg):
@@ -281,3 +281,55 @@ def elgamal(message,flg):
             index = ( i[1] * (i[0]**(p-1-x))  ) % p 
             decrytp += alphabet[index - 1]
         return decrytp.lower()
+
+def coprime2(a, b):
+    return bltin_gcd(a, b) == 1
+
+def rsa(message,flg):
+    p = 3
+    q = 7
+
+    n = p*q
+    eiler = (p-1)*(q-1)
+
+    rand_list = [x for x in range(0,eiler) if x % 2 != 0 if coprime2(x,eiler) ]
+    print (rand_list)
+
+    d = 0
+    e = 0
+
+    for check in rand_list:
+        for i in range(1000):
+            if (i*check)%eiler == 1:
+                d = i
+                e = check
+
+    pub_key = [e,n] # получение публичного ключа
+    private_key = [d,n] # приватного публичного ключа
+
+
+    check_key = lambda x,y: True if (y[0]**x[0])%eiler == 1 else False ## функция провреки ключа
+    check1 = check_key(pub_key,private_key)
+
+
+
+    alphabet = "АБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"
+
+    if flg == 'encrypt':
+        print_str = str()
+        res = list()
+        for i in message.upper():
+            index = alphabet.index(i)
+            res.append((index**pub_key[0])%pub_key[1])
+        print_str = str(res).replace('[','').replace(']','')
+        return print_str
+
+    else:
+        res = str()
+        for i in message.split(','):
+            index = (int(i)**private_key[0])%private_key[1]
+            for check_index,symb in enumerate(alphabet):
+                if check_index  == index :
+                    res += symb
+        return res
+
