@@ -12,9 +12,17 @@ def index(request):
         flag_crypt = int(request.POST['flag_crypt'])
         flag_action = request.POST['flag_action']
         response = str()
+        no_key_crypt = [1,6,7,9,10,11,15] 
 
-        if flag_crypt in [1,6,7,11,15] and key != '': # проверка на передачу ключа в те шифры, где это не нужно
+        if flag_crypt in no_key_crypt and key != '': # проверка на передачу ключа в те шифры, где это не нужно
             warning_list.append('Для данного шифра ключ не нужен. Игнорируем ключ')
+        elif flag_crypt not in no_key_crypt and key == '':
+            warning_list.append('Для данного шифра необходим ключ! Проверьте введенные данные')
+            context = {
+            'result': response,
+            'warning_list' : warning_list
+            }
+            return render(request,'index.html',context= context)
 
         if flag_crypt == 1:
             response = f.atbash(message,flag_action)
@@ -25,7 +33,7 @@ def index(request):
         elif flag_crypt == 4:
             pass
         elif flag_crypt == 5:
-            pass
+            response = f.playfer(message,flag_action,key)
         elif flag_crypt == 6:
             response = f.reshetka_kardano(message,flag_action)
         elif flag_crypt == 7:
@@ -33,9 +41,9 @@ def index(request):
         elif flag_crypt == 8:
             pass
         elif flag_crypt == 9:
-            pass
+            response = f.a5_realisation(message,flag_action)
         elif flag_crypt == 10:
-            pass
+            response = f.a52_realisation(message,flag_action)
         elif flag_crypt == 11:
             response = f.rsa(message,flag_action)
         elif flag_crypt == 12:
